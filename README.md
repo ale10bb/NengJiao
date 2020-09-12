@@ -13,3 +13,11 @@
 - 未设置任何异常处理及告警，按错没有后悔药
 - 尽量在导出报告后第一时间使用，尽量不要重复使用
 - 测试版本，不负责售后，出bug请自行改代码及参数
+- 代码从测评能脚1祖传下来的，到处都是咖喱味的屎
+
+## 开发指南
+
+- 打开微软的[VBA-Reference](https://docs.microsoft.com/zh-cn/office/vba/api/overview/word/object-model)，并放在一边
+- 关掉百度和CSDN，并把他们忘记
+- 泡一杯茶，调整心态
+- fuck VBA
