@@ -3,8 +3,9 @@ Public Function Main()
     ' 该份报告是否涉及操作系统、数据库、应用
     ' 数组中存储对应的章节编号，vb的默认值为0，有效序号从1开始
     Dim vulKind(3) As Integer
-    ' 自适应复制延时(Testing)
+    ' 自适应复制延时
     copyDelay = 0
+    copyDelay_max = 1
     
     Call CommonWindow.WriteStatus("——", "——", "初始化", "框架")
     Set oldAttachment = ActiveDocument
@@ -12,13 +13,19 @@ Public Function Main()
     ' ===== 从dotm中复制2-3章节（模板格式） =====
     Call ThisDocument.Range(ThisDocument.Sections(2).Range.Start, ThisDocument.Sections(3).Range.End).Copy
     Call Delay(copyDelay)
-    ' Issue：某些电脑在这里会随机报错4605，猜测是copy入剪贴板后，paste之前的系统处理问题
+    ' Issue：某些电脑在这里会随机报错4605，猜测是copy入剪贴板后，paste之前，剪贴板未处理完成
     ' 曾经在复制和粘贴之间加延时，可以大大降低该问题的出现频率
-    ' 因此引入测试特性：粘贴报错时，增加延时并重新粘贴，直至成功
-    ' (如果不是这个原因导致的，就直接死循环了，找白鼠测试中)
+    ' 微软论坛给出的解决方案也类似(Add DoEvents)
+    ' 因此引入特性：粘贴报错时，增加延时并重新粘贴，触及延时最大值则放弃复制
     On Error GoTo CopyFailureHandler
     Call newAttachment.Content.PasteAndFormat(wdUseDestinationStylesRecovery)
     On Error GoTo 0
+    ' 如果文档框架复制失败则直接结束程序
+    If Not newAttachment.Bookmarks.Exists("C3_Start") Then
+        Call MsgBox("框架复制失败，请重新运行宏")
+        Call newAttachment.Close(SaveChanges:=False)
+        Exit Function
+    End If
 
     ' ===== 获取项目编号并写入 =====
     Dim tempStr() As String
@@ -56,6 +63,7 @@ Public Function Main()
         ' 三级标题（层面）的情况
         If Left(oldAttachment.Range(startPos, startPos).ParagraphStyle, 4) = "标题 3" Then
             ' 从模板中复制三级菜单
+            ' 就一行字应该不会报错吧，懒得检测
             Call ThisDocument.Sections(4).Range.Paragraphs(1).Range.Copy
             Call Delay(copyDelay)
             On Error GoTo CopyFailureHandler
@@ -93,6 +101,11 @@ Public Function Main()
                 newAttachment.Bookmarks("C3_Start").Range.Start - 1 _
                 ).PasteAndFormat(wdUseDestinationStylesRecovery)
             On Error GoTo 0
+            ' 复制失败就跳过漏洞吧(少一个应该看不出来)
+            If Not newAttachment.Bookmarks.Exists("C2漏洞名称") Then
+                ' 垃圾VBA没有Continue
+                GoTo NextLoop
+            End if
             ' 填入漏洞内容
             Set headingRange = oldAttachment.Range(startPos, endPos).Paragraphs(1).Range
             ' 跳过标题号
@@ -127,15 +140,21 @@ Public Function Main()
             End If
             ' 如果有图，则额外复制漏洞名称到图注上，并复制图
             If flag Then
-                newAttachment.Bookmarks("C2漏洞名称2").Range.Text = headingText
                 Call oldAttachment.Range(startPos, endPos).InlineShapes(i_saved).Select
                 Call Selection.Copy
                 Call Delay(copyDelay)
                 On Error GoTo CopyFailureHandler
                 Call newAttachment.Bookmarks("C2图").Range.Paste
                 On Error GoTo 0
+                ' 复制失败则当没有图处理
+                If newAttachment.Bookmarks.Exists("C2图") Then
+                    flag = False
+                Else
+                    newAttachment.Bookmarks("C2漏洞名称2").Range.Text = headingText
+                End if
+            End If
             ' 否则删除图相关的两行
-            Else
+            If Not flag Then
                 newAttachment.Range( _
                     newAttachment.Bookmarks("C2图").Range.Start, _
                     newAttachment.Bookmarks("C2漏洞名称2").Range.End + 1 _
@@ -171,6 +190,7 @@ Public Function Main()
             newAttachment.Bookmarks("C2漏洞描述").Range.Text = oldAttachment.Range(discriptionStart, discriptionEnd).Text
             newAttachment.Bookmarks("C2漏洞建议").Range.Text = oldAttachment.Range(adviceStart, adviceEnd).Text
         End If
+NextLoop:
         startPos = oldAttachment.Range(startPos, startPos).GoTo(wdGoToHeading, wdGoToNext).Start
     Loop
     
@@ -259,7 +279,15 @@ Public Function Main()
     Exit Function
     ' 复制过快异常时的处理函数
 CopyFailureHandler:
-    copyDelay = copyDelay + 0.2
-    Call Delay(copyDelay)
-    Resume
+    ' 增加延时最大值判断，触及最大值时直接放弃复制，以防死循环
+    ' 放弃复制时，造成dstFile缺失内容(不影响后续流程)。并由外部检测并删除书签
+    If copyDelay > 1 Then
+        copyDelay = 0.4
+        Resume Next
+    ' 每次失败依次增加延时并重新尝试粘贴
+    Else
+        copyDelay = copyDelay + 0.2
+        Call Delay(copyDelay)
+        Resume
+    End If
 End Function
