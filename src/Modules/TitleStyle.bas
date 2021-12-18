@@ -3,7 +3,7 @@ Public Function PROMain()
     Set headingRange = ActiveDocument.Content
     Call headingRange.Find.Execute(FindText:="单项测评结果记录", Forward:=False)
     Call headingRange.Collapse
-    rangeStart = headingRange.start
+    rangeStart = headingRange.Start
     startStr = ActiveDocument.Range(rangeStart, rangeStart + 10).Text & "..."
     rangeEnd = ActiveDocument.Content.End
     endStr = "End"
@@ -12,9 +12,9 @@ Public Function PROMain()
     rangeIndexBefore = -1
     Do While True
         DoEvents
-        rangeIndexAfter = headingRange.start
+        rangeIndexAfter = headingRange.Start
         If rangeIndexBefore >= rangeIndexAfter Then Exit Do
-        rangeIndexBefore = headingRange.start
+        rangeIndexBefore = headingRange.Start
         currentStr = ActiveDocument.Range(rangeIndexAfter, rangeIndexAfter + 10).Text & "..."
         Call CommonWindow.WriteStatus(startStr, endStr, "核查表标题样式", currentStr)
         '删除原有编号，并应用样式
@@ -38,22 +38,22 @@ Public Function DBMain()
     Set headingRange = ActiveDocument.Content
     Call headingRange.Find.Execute(FindText:="漏洞扫描结果记录", Forward:=False)
     Call headingRange.Collapse
-    rangeEnd = headingRange.start
+    rangeEnd = headingRange.Start
     endStr = ActiveDocument.Range(rangeEnd, rangeEnd + 10).Text & "..."
 
     Set headingRange = ActiveDocument.Content
     Call headingRange.Find.Execute(FindText:="单项测评结果记录", Forward:=False)
     Call headingRange.Collapse
-    rangeStart = headingRange.start
+    rangeStart = headingRange.Start
     startStr = ActiveDocument.Range(rangeStart, rangeStart + 10).Text & "..."
 
     '循环修改附录D标题样式
     rangeIndexBefore = -1
     Do While True
         DoEvents
-        rangeIndexAfter = headingRange.start
+        rangeIndexAfter = headingRange.Start
         If rangeIndexBefore >= rangeIndexAfter Then Exit Do
-        rangeIndexBefore = headingRange.start
+        rangeIndexBefore = headingRange.Start
         '删除原有编号，并应用样式
         currentStr = ActiveDocument.Range(rangeIndexAfter, rangeIndexAfter + 10).Text & "..."
         Call CommonWindow.WriteStatus(startStr, endStr, "核查表标题样式", currentStr)

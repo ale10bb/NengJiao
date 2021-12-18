@@ -3,26 +3,26 @@ Public Function PROMain()
     Set headingRange = ActiveDocument.Content
     Call headingRange.Find.Execute(FindText:="测评对象选择结果", Forward:=False)
     Call headingRange.Collapse
-    rangeStart = headingRange.start
+    rangeStart = headingRange.Start
     startStr = ActiveDocument.Range(rangeStart, rangeStart + 10).Text & "..."
     
     Set headingRange = ActiveDocument.Content
     Call headingRange.Find.Execute(FindText:="单项测评结果汇总", Forward:=False)
     Call headingRange.Collapse
-    rangeEnd = headingRange.start
+    rangeEnd = headingRange.Start
     endStr = ActiveDocument.Range(rangeEnd, rangeEnd + 10).Text & "..."
     
     Set workRange = ActiveDocument.Range(rangeStart, rangeEnd)
     '删除空表，从后往前删
     For i = workRange.Tables.Count To 1 Step -1
         currentStr = ActiveDocument.Range( _
-            workRange.Tables(i).Range.GoTo(wdGoToHeading, wdGoToPrevious).start, _
-            workRange.Tables(i).Range.GoTo(wdGoToHeading, wdGoToPrevious).start + 10 _
+            workRange.Tables(i).Range.GoTo(wdGoToHeading, wdGoToPrevious).Start, _
+            workRange.Tables(i).Range.GoTo(wdGoToHeading, wdGoToPrevious).Start + 10 _
             ).Text & "..."
         Call CommonWindow.WriteStatus(startStr, endStr, "测评对象选择结果", currentStr)
         If workRange.Tables(i).Rows.Count = 1 Then
             ActiveDocument.Range( _
-                workRange.Tables(i).Range.GoTo(wdGoToHeading, wdGoToPrevious).start, _
+                workRange.Tables(i).Range.GoTo(wdGoToHeading, wdGoToPrevious).Start, _
                 workRange.Tables(i).Range.End _
                 ).Delete
         End If
@@ -32,26 +32,26 @@ Public Function PROMain()
     Set headingRange = ActiveDocument.Content
     Call headingRange.Find.Execute(FindText:="单项测评结果汇总", Forward:=False)
     Call headingRange.Collapse
-    rangeStart = headingRange.start
+    rangeStart = headingRange.Start
     startStr = ActiveDocument.Range(rangeStart, rangeStart + 10).Text & "..."
     
     Set headingRange = ActiveDocument.Content
     Call headingRange.Find.Execute(FindText:="单项测评小结", Forward:=False)
     Call headingRange.Collapse
-    rangeEnd = headingRange.start
+    rangeEnd = headingRange.Start
     endStr = ActiveDocument.Range(rangeEnd, rangeEnd + 10).Text & "..."
     
     Set workRange = ActiveDocument.Range(rangeStart, rangeEnd)
     '删除空表，从后往前删
     For i = workRange.Tables.Count To 1 Step -1
         currentStr = ActiveDocument.Range( _
-            workRange.Tables(i).Range.GoTo(wdGoToHeading, wdGoToPrevious).start, _
-            workRange.Tables(i).Range.GoTo(wdGoToHeading, wdGoToPrevious).start + 10 _
+            workRange.Tables(i).Range.GoTo(wdGoToHeading, wdGoToPrevious).Start, _
+            workRange.Tables(i).Range.GoTo(wdGoToHeading, wdGoToPrevious).Start + 10 _
             ).Text & "..."
         Call CommonWindow.WriteStatus(startStr, endStr, "单项测评结果汇总", currentStr)
         If workRange.Tables(i).Columns.Count = 3 And Mid(workRange.Tables(i).Cell(1, 1).Range.Text, 1, 2) = "序号" Then
             ActiveDocument.Range( _
-                workRange.Tables(i).Range.GoTo(wdGoToLine, wdGoToPrevious, 3).start, _
+                workRange.Tables(i).Range.GoTo(wdGoToLine, wdGoToPrevious, 3).Start, _
                 workRange.Tables(i).Range.End _
                 ).Delete
         End If
@@ -61,28 +61,24 @@ Public Function PROMain()
     Set headingRange = ActiveDocument.Content
     Call headingRange.Find.Execute(FindText:="项目涉及信息资产", Forward:=False)
     Call headingRange.Collapse
-    rangeStart = headingRange.start
+    rangeStart = headingRange.Start
     startStr = ActiveDocument.Range(rangeStart, rangeStart + 10).Text & "..."
     
     Set headingRange = ActiveDocument.Content
     Call headingRange.Find.Execute(FindText:="单项测评结果记录", Forward:=False)
     Call headingRange.Collapse
-    rangeEnd = headingRange.start
+    rangeEnd = headingRange.Start
     endStr = ActiveDocument.Range(rangeEnd, rangeEnd + 10).Text & "..."
     
     Set workRange = ActiveDocument.Range(rangeStart, rangeEnd)
     '删除空表，从后往前删
     For i = workRange.Tables.Count To 1 Step -1
         currentStr = ActiveDocument.Range( _
-            workRange.Tables(i).Range.GoTo(wdGoToLine, wdGoToPrevious).start, _
-            workRange.Tables(i).Range.GoTo(wdGoToLine, wdGoToPrevious).start + 10 _
+            workRange.Tables(i).Range.GoTo(wdGoToLine, wdGoToPrevious).Start, _
+            workRange.Tables(i).Range.GoTo(wdGoToLine, wdGoToPrevious).Start + 10 _
             ).Text & "..."
         Call CommonWindow.WriteStatus(startStr, endStr, "项目涉及信息资产", currentStr)
         If workRange.Tables(i).Rows.Count = 1 Then
-            Debug.Print ActiveDocument.Range( _
-                workRange.Tables(i).Range.End, _
-                workRange.Tables(i).Range.End + 2 _
-                ).Text
             If ActiveDocument.Range( _
                 workRange.Tables(i).Range.End, _
                 workRange.Tables(i).Range.End + 2 _
@@ -92,7 +88,7 @@ Public Function PROMain()
                 rangeEnd = workRange.Tables(i).Range.End
             End If
             ActiveDocument.Range( _
-                workRange.Tables(i).Range.GoTo(wdGoToLine, wdGoToPrevious).start, _
+                workRange.Tables(i).Range.GoTo(wdGoToLine, wdGoToPrevious).Start, _
                 rangeEnd _
                 ).Delete
         End If
@@ -105,21 +101,21 @@ Public Function DBMain()
     Set headingRange = ActiveDocument.Content
     Call headingRange.Find.Execute(FindText:="测评对象选择结果", Forward:=False)
     Call headingRange.Collapse
-    rangeStart = headingRange.start
+    rangeStart = headingRange.Start
     startStr = ActiveDocument.Range(rangeStart, rangeStart + 10).Text & "..."
     
     Set headingRange = ActiveDocument.Content
     Call headingRange.Find.Execute(FindText:="单项测评结果分析", Forward:=False)
     Call headingRange.Collapse
-    rangeEnd = headingRange.start
+    rangeEnd = headingRange.Start
     endStr = ActiveDocument.Range(rangeEnd, rangeEnd + 10).Text & "..."
     
     Set workRange = ActiveDocument.Range(rangeStart, rangeEnd)
     '空表加上描述，从后往前加
     For i = workRange.Tables.Count To 1 Step -1
         currentStr = ActiveDocument.Range( _
-            workRange.Tables(i).Range.GoTo(wdGoToHeading, wdGoToPrevious).start, _
-            workRange.Tables(i).Range.GoTo(wdGoToHeading, wdGoToPrevious).start + 10 _
+            workRange.Tables(i).Range.GoTo(wdGoToHeading, wdGoToPrevious).Start, _
+            workRange.Tables(i).Range.GoTo(wdGoToHeading, wdGoToPrevious).Start + 10 _
             ).Text & "..."
         Call CommonWindow.WriteStatus(startStr, endStr, "测评对象选择结果", currentStr)
         If workRange.Tables(i).Rows.Count = 1 Then
@@ -139,21 +135,21 @@ Public Function DBMain()
     Set headingRange = ActiveDocument.Content
     Call headingRange.Find.Execute(FindText:="被测对象资产", Forward:=False)
     Call headingRange.Collapse
-    rangeStart = headingRange.start
+    rangeStart = headingRange.Start
     startStr = ActiveDocument.Range(rangeStart, rangeStart + 10).Text & "..."
     
     Set headingRange = ActiveDocument.Content
     Call headingRange.Find.Execute(FindText:="上次测评问题整改情况说明", Forward:=False)
     Call headingRange.Collapse
-    rangeEnd = headingRange.start
+    rangeEnd = headingRange.Start
     endStr = ActiveDocument.Range(rangeEnd, rangeEnd + 10).Text & "..."
     
     Set workRange = ActiveDocument.Range(rangeStart, rangeEnd)
     '删除空表，从后往前删
     For i = workRange.Tables.Count To 1 Step -1
         currentStr = ActiveDocument.Range( _
-            workRange.Tables(i).Range.GoTo(wdGoToLine, wdGoToPrevious).start, _
-            workRange.Tables(i).Range.GoTo(wdGoToLine, wdGoToPrevious).start + 10 _
+            workRange.Tables(i).Range.GoTo(wdGoToLine, wdGoToPrevious).Start, _
+            workRange.Tables(i).Range.GoTo(wdGoToLine, wdGoToPrevious).Start + 10 _
             ).Text & "..."
         Call CommonWindow.WriteStatus(startStr, endStr, "被测对象资产", currentStr)
         If workRange.Tables(i).Rows.Count = 1 Then
@@ -175,8 +171,8 @@ Public Function ManualMain()
     '空表加上描述，从后往前加
     For i = workRange.Tables.Count To 1 Step -1
         currentStr = ActiveDocument.Range( _
-            workRange.Tables(i).Range.GoTo(wdGoToHeading, wdGoToPrevious).start, _
-            workRange.Tables(i).Range.GoTo(wdGoToHeading, wdGoToPrevious).start + 10 _
+            workRange.Tables(i).Range.GoTo(wdGoToHeading, wdGoToPrevious).Start, _
+            workRange.Tables(i).Range.GoTo(wdGoToHeading, wdGoToPrevious).Start + 10 _
             ).Text & "..."
         Call CommonWindow.WriteStatus("Manual", "Manual", "自定义表格", currentStr)
         If workRange.Tables(i).Rows.Count = 1 Then
@@ -209,21 +205,21 @@ Public Function PlanMain()
     Set headingRange = ActiveDocument.Content
     Call headingRange.Find.Execute(FindText:="系统构成", Forward:=False)
     Call headingRange.Collapse
-    rangeStart = headingRange.start
+    rangeStart = headingRange.Start
     startStr = ActiveDocument.Range(rangeStart, rangeStart + 10).Text & "..."
     
     Set headingRange = ActiveDocument.Content
     Call headingRange.Find.Execute(FindText:="前次测评问题整改情况说明", Forward:=False)
     Call headingRange.Collapse
-    rangeEnd = headingRange.start
+    rangeEnd = headingRange.Start
     endStr = ActiveDocument.Range(rangeEnd, rangeEnd + 10).Text & "..."
     
     Set workRange = ActiveDocument.Range(rangeStart, rangeEnd)
     '空表加上描述，从后往前加
     For i = workRange.Tables.Count To 1 Step -1
         currentStr = ActiveDocument.Range( _
-            workRange.Tables(i).Range.GoTo(wdGoToHeading, wdGoToPrevious).start, _
-            workRange.Tables(i).Range.GoTo(wdGoToHeading, wdGoToPrevious).start + 10 _
+            workRange.Tables(i).Range.GoTo(wdGoToHeading, wdGoToPrevious).Start, _
+            workRange.Tables(i).Range.GoTo(wdGoToHeading, wdGoToPrevious).Start + 10 _
             ).Text & "..."
         Call CommonWindow.WriteStatus(startStr, endStr, "系统构成", currentStr)
         If workRange.Tables(i).Rows.Count = 1 Then
@@ -243,21 +239,21 @@ Public Function PlanMain()
     Set headingRange = ActiveDocument.Content
     Call headingRange.Find.Execute(FindText:="测评对象选择结果", Forward:=False)
     Call headingRange.Collapse
-    rangeStart = headingRange.start
+    rangeStart = headingRange.Start
     startStr = ActiveDocument.Range(rangeStart, rangeStart + 10).Text & "..."
     
     Set headingRange = ActiveDocument.Content
     Call headingRange.Find.Execute(FindText:="测评重点", Forward:=False)
     Call headingRange.Collapse
-    rangeEnd = headingRange.start
+    rangeEnd = headingRange.Start
     endStr = ActiveDocument.Range(rangeEnd, rangeEnd + 10).Text & "..."
     
     Set workRange = ActiveDocument.Range(rangeStart, rangeEnd)
     '空表加上描述，从后往前加
     For i = workRange.Tables.Count To 1 Step -1
         currentStr = ActiveDocument.Range( _
-            workRange.Tables(i).Range.GoTo(wdGoToHeading, wdGoToPrevious).start, _
-            workRange.Tables(i).Range.GoTo(wdGoToHeading, wdGoToPrevious).start + 10 _
+            workRange.Tables(i).Range.GoTo(wdGoToHeading, wdGoToPrevious).Start, _
+            workRange.Tables(i).Range.GoTo(wdGoToHeading, wdGoToPrevious).Start + 10 _
             ).Text & "..."
         Call CommonWindow.WriteStatus(startStr, endStr, "测评对象选择结果", currentStr)
         If workRange.Tables(i).Rows.Count = 1 Then
@@ -277,21 +273,21 @@ Public Function PlanMain()
     Set headingRange = ActiveDocument.Content
     Call headingRange.Find.Execute(FindText:="扩展安全要求", Forward:=False)
     Call headingRange.Collapse
-    rangeStart = headingRange.start
+    rangeStart = headingRange.Start
     startStr = ActiveDocument.Range(rangeStart, rangeStart + 10).Text & "..."
     
     Set headingRange = ActiveDocument.Content
     Call headingRange.Find.Execute(FindText:="整体测评", Forward:=False)
     Call headingRange.Collapse
-    rangeEnd = headingRange.start
+    rangeEnd = headingRange.Start
     endStr = ActiveDocument.Range(rangeEnd, rangeEnd + 10).Text & "..."
     
     Set workRange = ActiveDocument.Range(rangeStart, rangeEnd)
     '删除空表，从后往前删
     For i = workRange.Tables.Count To 1 Step -1
         currentStr = ActiveDocument.Range( _
-            workRange.Tables(i).Range.GoTo(wdGoToLine, wdGoToPrevious).start, _
-            workRange.Tables(i).Range.GoTo(wdGoToLine, wdGoToPrevious).start + 10 _
+            workRange.Tables(i).Range.GoTo(wdGoToLine, wdGoToPrevious).Start, _
+            workRange.Tables(i).Range.GoTo(wdGoToLine, wdGoToPrevious).Start + 10 _
             ).Text & "..."
         Call CommonWindow.WriteStatus(startStr, endStr, "扩展安全要求", currentStr)
         If workRange.Tables(i).Rows.Count = 1 Then
